@@ -19,4 +19,4 @@ If you want to give yourself a coin cake, do /coincake give <amount>
 
 ##
 
-Now you've just obtained the plugin! Let's hope you don't down on the coin while eating the cake. ```<('o'<)```
+Now you've just obtained the plugin! Let's hope you don't down on the coin while eating the cake ```<('o'<)```.
