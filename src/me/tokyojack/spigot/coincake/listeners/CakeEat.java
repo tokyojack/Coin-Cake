@@ -18,20 +18,23 @@ import net.milkbowl.vault.economy.EconomyResponse;
 public class CakeEat implements Listener {
 
 	@SuppressWarnings("deprecation")
-	@EventHandler
-	public void onEat(PlayerInteractEvent event) {
-		if (event.isCancelled())
+	@EventHandler(ignoreCancelled = true)
+	public void onPlayerInteract(PlayerInteractEvent event) {
+		Block clickedBlock = event.getClickedBlock();
+		
+		// Checks the block is null
+		if (clickedBlock == null)
 			return;
 
-		if (event.getClickedBlock() == null)
+		// Checks the clicked block type is AIR
+		if (clickedBlock.getType() == Material.AIR)
 			return;
 
-		if (event.getClickedBlock().getType() == Material.AIR)
+		// Checks if the clicked block is a CAKE_BLOCK
+		if (clickedBlock.getType() != Material.CAKE_BLOCK)
 			return;
 
-		if (event.getClickedBlock().getType() != Material.CAKE_BLOCK)
-			return;
-
+		// Checks if the action is right clicking
 		if (event.getAction() != Action.RIGHT_CLICK_BLOCK)
 			return;
 
@@ -41,17 +44,16 @@ public class CakeEat implements Listener {
 		int amount = event.getClickedBlock().getMetadata("gamblecake").get(0).asInt();
 
 		if (RandomNumber(100) <= 7) {
-			EconomyResponse r = Core.getPlugin().getEconomy().depositPlayer(event.getPlayer().getName(), amount);
-			if (!r.transactionSuccess())
+			EconomyResponse transactionResponse = Core.getPlugin().getEconomy().depositPlayer(event.getPlayer().getName(), amount);
+			if (!transactionResponse.transactionSuccess())
 				return;
 
 			event.getClickedBlock().setType(Material.AIR);
 			event.getClickedBlock().getWorld().playSound(event.getClickedBlock().getLocation(), Sound.EXPLODE, 2, 1);
-			ParticleEffect.FLAME.display(RandomNumber(1), RandomNumber(1), RandomNumber(1), 1, 50,
-					event.getClickedBlock().getLocation(), 50);
-			ParticleEffect.EXPLOSION_HUGE.display(0, 0, 0, 0, 1, event.getClickedBlock().getLocation(), 50);
+			
 			event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&',
-					"&2&l[&a&l>>&2&l]&f You've found a &e&l$" + amount + "&e coin!"));
+					"&fYou've found a &e&l$" + amount + "&e coin!"));
+					
 			event.getClickedBlock().removeMetadata("gamblecake", Core.getPlugin());
 			return;
 		}
@@ -59,12 +61,13 @@ public class CakeEat implements Listener {
 		int total = cake.getSlicesRemaining() - 1;
 
 		if (total >= 1)
+			// Divides the "amount" by 2 as "amount" is the reward (as the reward is 2x the bought price)
 			event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&',
-					"&2&l[&a&l>>&2&l]&f You've eaten a slice of a &e$" + amount / 2 + " coin cake"));
-
+					"&fYou've eaten a slice of a &e$" + amount / 2 + " coin cake"));
+					
 		if (total < 0) {
 			event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&',
-					"&4&l[&c&l>>&4&l]&f You've eaten all the slices in the &e$" + amount / 2 + " &Fcoin cake!"));
+					"&fYou've eaten all the slices in the &e$" + amount / 2 + " &Fcoin cake!"));
 			event.getClickedBlock().setType(Material.AIR);
 			event.getClickedBlock().removeMetadata("gamblecake", Core.getPlugin());
 			return;
@@ -74,12 +77,8 @@ public class CakeEat implements Listener {
 		event.getClickedBlock().setData(cake.getData());
 	}
 
-	private int RandomNumber(int s) {
-		Random random = new Random();
-		int randomnumber = random.nextInt(s) + 1;
-		int intran = randomnumber;
-		return intran;
-
+	private int RandomNumber(int range) {
+		return new Random().nextInt(range) + 1;
 	}
 
 }

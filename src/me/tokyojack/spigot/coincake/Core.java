@@ -52,13 +52,13 @@ public class Core extends JavaPlugin {
 	}
 
 	// From Vault's WIKI if I'm correct
-		private boolean setupEconomy() {
-			RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager()
-					.getRegistration(net.milkbowl.vault.economy.Economy.class);
-			if (economyProvider != null)
-				economy = economyProvider.getProvider();
-
-			return (economy != null);
-		}
+	private boolean setupEconomy() {
+		RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager()
+				.getRegistration(net.milkbowl.vault.economy.Economy.class);
+		if (economyProvider != null)
+			economy = economyProvider.getProvider();
+		
+		return (economy != null);
+	}
 	
 }

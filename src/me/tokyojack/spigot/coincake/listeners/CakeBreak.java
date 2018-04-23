@@ -9,11 +9,13 @@ public class CakeBreak implements Listener {
 
 	@EventHandler
 	public void onCakeBreak(BlockBreakEvent event) {
+		
+		// If the cake doesn't have the metatag "gamblecake". (Gains it when placed)
 		if (!event.getBlock().hasMetadata("gamblecake"))
 			return;
 
 		event.getPlayer().sendMessage(
-				ChatColor.translateAlternateColorCodes('&', "&4&l[&c&l>>&4&l]&f You cannot break &ecoin cakes"));
+				ChatColor.translateAlternateColorCodes('&', "&c You cannot break &ecoin cakes"));
 		event.setCancelled(true);
 	}
 

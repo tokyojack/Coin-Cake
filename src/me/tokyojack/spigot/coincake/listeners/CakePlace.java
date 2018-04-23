@@ -16,6 +16,7 @@ public class CakePlace implements Listener {
 	public void cakeeaterion(BlockPlaceEvent event) {
 		Player player = event.getPlayer();
 		ItemStack item = player.getItemInHand();
+		
 		if (item == null)
 			return;
 
